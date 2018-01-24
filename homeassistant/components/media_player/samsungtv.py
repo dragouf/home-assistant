@@ -12,7 +12,7 @@ import voluptuous as vol
 
 from homeassistant.components.media_player import (
     SUPPORT_NEXT_TRACK, SUPPORT_PAUSE, SUPPORT_PREVIOUS_TRACK,
-    SUPPORT_TURN_OFF, SUPPORT_VOLUME_MUTE, SUPPORT_VOLUME_STEP,
+    SUPPORT_TURN_OFF, SUPPORT_VOLUME_MUTE, SUPPORT_SELECT_SOURCE, SUPPORT_VOLUME_STEP,
     SUPPORT_PLAY, MediaPlayerDevice, PLATFORM_SCHEMA, SUPPORT_TURN_ON)
 from homeassistant.const import (
     CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON, STATE_UNKNOWN, CONF_PORT,
@@ -33,7 +33,7 @@ DEFAULT_TIMEOUT = 0
 KNOWN_DEVICES_KEY = 'samsungtv_known_devices'
 
 SUPPORT_SAMSUNGTV = SUPPORT_PAUSE | SUPPORT_VOLUME_STEP | \
-    SUPPORT_VOLUME_MUTE | SUPPORT_PREVIOUS_TRACK | \
+    SUPPORT_SELECT_SOURCE | SUPPORT_VOLUME_MUTE | SUPPORT_PREVIOUS_TRACK | \
     SUPPORT_NEXT_TRACK | SUPPORT_TURN_OFF | SUPPORT_PLAY
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
@@ -238,3 +238,7 @@ class SamsungTVDevice(MediaPlayerDevice):
             self._wol.send_magic_packet(self._mac)
         else:
             self.send_key('KEY_POWERON')
+
+    def select_source(self, source):
+        """Select input source."""
+        self.send_key('KEY_HDMI')
